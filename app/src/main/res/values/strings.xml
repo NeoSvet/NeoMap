@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">НеоКарты</string>
+    <string name="marker_name">Название маркера</string>
+    <string name="search_places">Найти места</string>
+    <string name="name_exist">Это название уже используется!</string>
+    <string name="menu_map_mode">Режим карты</string>
+    <string name="menu_map_mode_normal">Нормальный</string>
+    <string name="menu_map_mode_satellite">Спутник</string>
+    <string name="menu_map_mode_terrain">Территория</string>
+    <string name="menu_map_traffic">Пробки</string>
+    <string name="menu_map_location">Моя позиция</string>
+</resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Menu "My Location" -->
+    <item
+        android:id="@+id/menu_map_location"
+        android:icon="@drawable/my_position"
+        android:orderInCategory="3"
+        android:showAsAction="always"
+        android:title="@string/menu_map_location"
+        tools:ignore="AppCompatResource" />
+
+    <!-- Menu "Map Type" -->
+    <item
+        android:id="@+id/menu_map_mode"
+        android:icon="@drawable/map_mode"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/menu_map_mode"
+        tools:ignore="AppCompatResource">
+        <menu>
+
+            <item
+                android:id="@+id/menu_map_mode_normal"
+                android:orderInCategory="1"
+                android:showAsAction="never"
+                android:title="@string/menu_map_mode_normal"
+                tools:ignore="AppCompatResource" />
+
+            <item
+                android:id="@+id/menu_map_mode_satellite"
+                android:orderInCategory="2"
+                android:showAsAction="never"
+                android:title="@string/menu_map_mode_satellite"
+                tools:ignore="AppCompatResource" />
+
+            <item
+                android:id="@+id/menu_map_mode_terrain"
+                android:orderInCategory="2"
+                android:showAsAction="never"
+                android:title="@string/menu_map_mode_terrain"
+                tools:ignore="AppCompatResource" />
+
+        </menu>
+    </item>
+
+    <!-- Menu "Map Traffic" -->
+    <item
+        android:id="@+id/menu_map_traffic"
+        android:icon="@drawable/traffic"
+        android:orderInCategory="2"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_map_traffic"
+        tools:ignore="AppCompatResource" />
+
+</menu>
