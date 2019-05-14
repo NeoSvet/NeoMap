@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="main">
+        <item>Открыть карту</item>
+        <item>Локация с зумом 3</item>
+        <item>Локация с зумом 15</item>
+        <item>Найти адрес</item>
+        <item>Найти кафе</item>
+    </array>
+</resources>
