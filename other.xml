@@ -1,0 +1,65 @@
+<application>
+  <component name="PropertiesComponent">
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.COMPONENT_TREE.AUTO_HIDE" value="false" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.COMPONENT_TREE.LEFT" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.COMPONENT_TREE.SPLIT" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.PALETTE.AUTO_HIDE" value="false" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.PALETTE.LEFT" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.PALETTE.SPLIT" value="false" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.PROPERTIES.AUTO_HIDE" value="false" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.PROPERTIES.LEFT" value="false" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.PROPERTIES.SPLIT" value="false" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.NELE_EDITOR.TOOL_ORDER" value="PROPERTIES,PALETTE,COMPONENT_TREE" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.Preview.PALETTE.AUTO_HIDE" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.Preview.PALETTE.LEFT" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.Preview.PALETTE.SPLIT" value="false" />
+    <property name="ATTACHED_TOOL_WINDOW.DEFAULT.Preview.TOOL_ORDER" value="PALETTE" />
+    <property name="ATTACHED_TOOL_WINDOW.NELE_EDITOR.COMPONENT_TREE.LEFT" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.NELE_EDITOR.COMPONENT_TREE.SPLIT" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.NELE_EDITOR.LEFT.UNSCALED.WIDTH" value="225" />
+    <property name="ATTACHED_TOOL_WINDOW.NELE_EDITOR.PALETTE.LEFT" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.NELE_EDITOR.RIGHT.UNSCALED.WIDTH" value="225" />
+    <property name="ATTACHED_TOOL_WINDOW.NELE_EDITOR.TOOL_ORDER" value="PROPERTIES,PALETTE,COMPONENT_TREE" />
+    <property name="ATTACHED_TOOL_WINDOW.Preview.PALETTE.AUTO_HIDE" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.Preview.PALETTE.LEFT" value="true" />
+    <property name="ATTACHED_TOOL_WINDOW.Preview.TOOL_ORDER" value="PALETTE" />
+    <property name="AndroidEnableDdms" value="true" />
+    <property name="AndroidInitConfigurator.V1" value="true" />
+    <property name="AndroidInitConfigurator.V3" value="true" />
+    <property name="AndroidInitConfigurator.V5" value="true" />
+    <property name="CommitChangeListDialog.DETAILS_SPLITTER_PROPORTION_2" value="0.8681319" />
+    <property name="CommitChangeListDialog.SPLITTER_PROPORTION_2" value="0.73333335" />
+    <property name="CommittedChanges.SplitterProportions.0" value="700" />
+    <property name="CommittedChanges.SplitterProportions.1" value="500" />
+    <property name="Copy.OpenInEditor" value="true" />
+    <property name="ExpandBeforeRunStepsPanel" value="true" />
+    <property name="ExpandRunDashboardTypesPanel" value="false" />
+    <property name="FileTemplates.SelectedTemplate" value="HTML File" />
+    <property name="KEYMAP" value="pull&#10;genera&#10;Redo" />
+    <property name="LOG_FILTER_HISTORY" value="neosvet&#10;neotag&#10;onError&#10;neotest&#10;neotag: restor" />
+    <property name="LayoutCode.optimizeImports" value="false" />
+    <property name="LayoutCode.processChangedText" value="true" />
+    <property name="LayoutCode.rearrangeEntriesJava" value="false" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="MobileminApi" value="21" />
+    <property name="SAVED_COMPANY_DOMAIN" value="neosvet.ru" />
+    <property name="SearchEveryWhereHistory" value="" />
+    <property name="Vcs.Log.Text.Filter.History" value="ver 2&#10;ver2" />
+    <property name="android-component-compatibility-check" value="1557824334622" />
+    <property name="build.toolwindow.Build Output.selection.state" value="com.intellij.build.BuildTreeConsoleView" />
+    <property name="build.toolwindow.Build.selection.state" value="com.intellij.build.BuildTreeConsoleView" />
+    <property name="build.toolwindow.Sync.selection.state" value="com.intellij.build.BuildTreeConsoleView" />
+    <property name="com.intellij.diagnostic.IdeErrorsDialogactiveTab" value="0" />
+    <property name="decompiler.legal.notice.accepted" value="true" />
+    <property name="file.chooser.recent.files" value="C:/My programes/AndroidStudioProjects/NeoMap&#10;C:/My programes/AndroidStudioProjects/Wallpaper&#10;C:/Users/NeoSvet/.android/publish.keystore&#10;C:/My programes/AndroidStudioProjects/VestNewAge&#10;C:/Users/NeoSvet/Desktop&#10;C:/Users/NeoSvet/Documents/My programes/AndroidStudioProjects/Telegram-master&#10;C:/Users/NeoSvet/Documents/My programes/Android (Eclipse)/publish.keystore&#10;C:/Users/NeoSvet/Documents/My programes/Android (Eclipse)/1publish.keystore&#10;C:/Users/NeoSvet/Downloads/sms.png&#10;C:/Users/NeoSvet/Pictures/ic_launcher src.png&#10;C:/Users/NeoSvet/Pictures/ic_launcher.png&#10;C:/Users/NeoSvet/Documents/My programes/AndroidStudioProjects/VestNewAge&#10;C:/Program Files/Git/bin/git.exe&#10;C:/Program Files (x86)/SmartGit/git/git-bash.exe&#10;C:/Program Files (x86)/SmartGit/git/git-cmd.exe&#10;C:/Users/NeoSvet/Documents/My programes/AndroidStudioProjects/Wallpaper" />
+    <property name="file.gist.reindex.count" value="2415" />
+    <property name="fileTypeChangedCounter" value="1" />
+    <property name="installed.kotlin.plugin.version" value="1.3.21-release-Studio3.4-1" />
+    <property name="lastTip" value="1" />
+    <property name="newly.installed.api.level" value="26" />
+    <property name="palette.category.width" value="100" />
+    <property name="studio.activity.count" value="0" />
+    <property name="vcs.log.changes.splitter.proportion" value="0.7145946" />
+  </component>
+</application>

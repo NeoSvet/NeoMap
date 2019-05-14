@@ -1,0 +1,14 @@
+<scheme name="_@user_Default" version="142" parent_scheme="Default">
+  <option name="FONT_SCALE" value="1.5" />
+  <metaInfo>
+    <property name="created">2018-01-22T10:21:12</property>
+    <property name="ide">AndroidStudio</property>
+    <property name="ideVersion">3.0.1.0</property>
+    <property name="modified">2018-01-22T12:46:39</property>
+    <property name="originalScheme">Default</property>
+  </metaInfo>
+  <option name="EDITOR_FONT_SIZE" value="22" />
+  <option name="CONSOLE_FONT_NAME" value="Monospaced" />
+  <option name="CONSOLE_FONT_SIZE" value="18" />
+  <option name="EDITOR_FONT_NAME" value="Monospaced" />
+</scheme>
