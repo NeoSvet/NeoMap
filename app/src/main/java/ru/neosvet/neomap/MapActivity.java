@@ -4,6 +4,7 @@ package ru.neosvet.neomap;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -359,6 +360,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 fabMarker.setVisibility(View.GONE);
                 fabOk.setVisibility(View.VISIBLE);
                 ivPointer.setVisibility(View.VISIBLE);
+            }
+        });
+        fabMarker.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                startActivity(new Intent(MapActivity.this, MarkersActivity.class));
+                return false;
             }
         });
         fabOk.setOnClickListener(new View.OnClickListener() {

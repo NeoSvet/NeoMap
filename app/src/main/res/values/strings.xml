@@ -9,4 +9,7 @@
     <string name="menu_map_mode_terrain">Территория</string>
     <string name="menu_map_traffic">Пробки</string>
     <string name="menu_map_location">Моя позиция</string>
+    <string name="title_activity_markers">Метки на карте</string>
+    <string name="s_export">Экспорт</string>
+    <string name="s_import">Импорт</string>
 </resources>
