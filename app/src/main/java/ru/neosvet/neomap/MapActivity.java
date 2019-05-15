@@ -120,7 +120,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         //http://stackoverflow.com/questions/35484767/activitycompat-requestpermissions-not-showing-dialog-box
-        if (grantResults.length > 0 && grantResults[0] == 0) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             LatLng loc = getMeLoc();
             if (loc != null)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 13F));
@@ -329,8 +329,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onPause();
         DataBase db = new DataBase(this);
         SQLiteDatabase sq = db.getWritableDatabase();
+        ContentValues cv;
         for (String name : markers.keySet()) {
-            ContentValues cv = new ContentValues();
+            cv = new ContentValues();
             cv.put(DataBase.NAME, name);
             cv.put(DataBase.LAT, markers.get(name).latitude);
             cv.put(DataBase.LNG, markers.get(name).longitude);
