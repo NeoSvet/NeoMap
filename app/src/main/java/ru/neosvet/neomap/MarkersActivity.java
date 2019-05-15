@@ -1,19 +1,33 @@
 package ru.neosvet.neomap;
 
+import android.Manifest;
+import android.content.ContentValues;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MarkersActivity extends AppCompatActivity {
     private ListView lvMarkers;
+    private View fabEdit;
     private ArrayAdapter<String> adMarkers;
     private List<Double> mLat = new ArrayList<Double>();
     private List<Double> mLng = new ArrayList<Double>();
@@ -25,10 +39,11 @@ public class MarkersActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        fabEdit = findViewById(R.id.fabEdit);
         initList();
         loadList();
+        initPermission();
 
-//        FloatingActionButton fab = findViewById(R.id.fabEdit);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -72,11 +87,82 @@ public class MarkersActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         final int id = item != null ? item.getItemId() : 0;
-        if (id == R.id.menu_export) {
-
-        } else if (id == R.id.menu_import) {
-
+        String file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                .getAbsolutePath() + "/neo_markers.txt";
+        try {
+            if (id == R.id.menu_export) {
+                File f = new File(file);
+                BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+                for (int i = 0; i < mLat.size(); i++) {
+                    bw.write("[");
+                    bw.write(mLng.get(i).toString());
+                    bw.write(",");
+                    bw.write(mLat.get(i).toString());
+                    bw.write(",\"");
+                    bw.write(adMarkers.getItem(i));
+                    bw.write("\",\"\"]");
+                    bw.newLine();
+                    bw.flush();
+                }
+                bw.close();
+                Snackbar.make(fabEdit, getResources().getString(R.string.export_done),
+                        Snackbar.LENGTH_LONG).show();
+            } else if (id == R.id.menu_import) {
+                File f = new File(file);
+                if (!f.exists()) return false;
+                BufferedReader br = new BufferedReader(new FileReader(f));
+                DataBase db = new DataBase(this);
+                SQLiteDatabase sq = db.getWritableDatabase();
+                ContentValues cv;
+                String s;
+                int i;
+                while ((s = br.readLine()) != null) {
+                    i = s.indexOf((","));
+                    cv = new ContentValues();
+                    cv.put(DataBase.LNG, Double.parseDouble(s.substring(1, i)));
+                    i++;
+                    cv.put(DataBase.LAT, Double.parseDouble(s.substring(i, s.indexOf(",", i))));
+                    i = s.indexOf(("\"")) + 1;
+                    s = s.substring(i, s.indexOf("\"", i));
+                    cv.put(DataBase.NAME, s);
+                    int r = sq.update(DataBase.TABLE, cv, DataBase.NAME + " = ?", new String[]{s});
+                    if (r == 0) // no update
+                        sq.insert(DataBase.TABLE, null, cv);
+                }
+                br.close();
+                db.close();
+                Snackbar.make(fabEdit, getResources().getString(R.string.ready),
+                        Snackbar.LENGTH_LONG).show();
+                loadList();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Snackbar.make(fabEdit, getResources().getString(R.string.error),
+                    Snackbar.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initPermission() {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    }, 1);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        //http://stackoverflow.com/questions/35484767/activitycompat-requestpermissions-not-showing-dialog-box
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            //Permission Allowed
+        } else {
+            //Permission Denied
+            Snackbar.make(fabEdit, getResources().getString(R.string.storage_denied),
+                    Snackbar.LENGTH_LONG).show();
+        }
     }
 }

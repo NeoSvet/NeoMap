@@ -12,4 +12,8 @@
     <string name="title_activity_markers">Метки на карте</string>
     <string name="s_export">Экспорт</string>
     <string name="s_import">Импорт</string>
+    <string name="export_done">Записан neo_markers.txt в Downloads</string>
+    <string name="ready">Готово</string>
+    <string name="error">Произошла ошибка</string>
+    <string name="storage_denied">Функции экспорта и импорта будут недоступны</string>
 </resources>
