@@ -133,6 +133,9 @@ public class MarkersActivity extends AppCompatActivity {
                 db.close();
                 Snackbar.make(fabEdit, getResources().getString(R.string.ready),
                         Snackbar.LENGTH_LONG).show();
+                adMarkers.clear();
+                mLat.clear();
+                mLng.clear();
                 loadList();
             }
         } catch (Exception e) {
