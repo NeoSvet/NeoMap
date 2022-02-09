@@ -16,4 +16,11 @@
     <string name="ready">Готово</string>
     <string name="error">Произошла ошибка</string>
     <string name="storage_denied">Функции экспорта и импорта будут недоступны</string>
+    <string name="no_results">Результатов нет</string>
+    <string name="format_distance">%.1f м</string>
+    <string name="format_location">%.4f x %.4f</string>
+    <string name="format_marker">Маркер %d</string>
+    <string name="search">Поиск...</string>
+    <string name="default_search">кафе</string>
+    <string name="default_location">Москва</string>
 </resources>
