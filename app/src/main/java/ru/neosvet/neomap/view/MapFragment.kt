@@ -135,8 +135,8 @@ class MapFragment : Fragment(), MapView, BackEvent {
                 presenter.setNormalMap()
             R.id.menu_map_mode_satellite ->
                 presenter.setSatelliteMap()
-            R.id.menu_map_mode_terrain ->
-                presenter.setTerrainMap()
+            R.id.menu_map_mode_hybrid ->
+                presenter.setHybridMap()
             R.id.menu_map_traffic ->
                 presenter.switchTraffic()
             R.id.menu_map_location ->

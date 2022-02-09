@@ -53,8 +53,8 @@ class MapPresenter(
         map.mapType = GoogleMap.MAP_TYPE_SATELLITE
     }
 
-    fun setTerrainMap() {
-        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+    fun setHybridMap() {
+        map.mapType = GoogleMap.MAP_TYPE_HYBRID
     }
 
     fun switchTraffic() {

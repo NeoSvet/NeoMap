@@ -36,10 +36,10 @@
                 tools:ignore="AppCompatResource" />
 
             <item
-                android:id="@+id/menu_map_mode_terrain"
+                android:id="@+id/menu_map_mode_hybrid"
                 android:orderInCategory="2"
                 android:showAsAction="never"
-                android:title="@string/menu_map_mode_terrain"
+                android:title="@string/menu_map_mode_hybrid"
                 tools:ignore="AppCompatResource" />
 
         </menu>
