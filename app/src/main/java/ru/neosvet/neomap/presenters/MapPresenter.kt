@@ -6,9 +6,9 @@ import android.location.Geocoder
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
+import kotlinx.coroutines.*
 import ru.neosvet.neomap.DataBase
 import ru.neosvet.neomap.R
-import java.io.IOException
 
 class MapPresenter(
     private val view: MapView,
@@ -26,6 +26,18 @@ class MapPresenter(
         get() = markers.size
     private val markers = HashMap<String, LatLng>()
     lateinit var map: GoogleMap
+
+    private val scope = CoroutineScope(
+        Dispatchers.IO
+                + SupervisorJob()
+                + CoroutineExceptionHandler { _, throwable ->
+            handleError(throwable)
+        })
+
+    private fun handleError(error: Throwable) {
+        error.printStackTrace()
+        view.showStatus(error.localizedMessage ?: "Error")
+    }
 
     fun clearResult() {
         containsResult = false
@@ -103,25 +115,21 @@ class MapPresenter(
     }
 
     fun showPlace(place: String, geocoder: Geocoder) {
-        Thread {
-            try {
-                val addresses = geocoder.getFromLocationName(place, 1)
-                if (addresses.size == 0)
-                    return@Thread
+        scope.launch {
+            val addresses = geocoder.getFromLocationName(place, 1)
+            if (addresses.size == 0)
+                return@launch
 
-                val location = LatLng(
-                    addresses[0].latitude,
-                    addresses[0].longitude
+            val location = LatLng(
+                addresses[0].latitude,
+                addresses[0].longitude
+            )
+            view.post {
+                map.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(location, ZOOM_FINELY)
                 )
-                view.post {
-                    map.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(location, ZOOM_FINELY)
-                    )
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
             }
-        }.start()
+        }
     }
 
     fun save() {
@@ -148,23 +156,18 @@ class MapPresenter(
     fun search(request: String, geocoder: Geocoder) {
         //TODO fix search: why always only one result?
         val target = map.cameraPosition.target
-        Thread {
-            try {
-                val lat1 = target.latitude - 0.2
-                val lat2 = target.latitude + 0.2
-                val lng1 = target.longitude - 0.2
-                val lng2 = target.longitude + 0.2
-                val list = geocoder.getFromLocationName(request, 10, lat1, lng1, lat2, lng2)
-                view.post {
-                    parseSearchResult(list)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-                view.post {
-                    view.showStatus("Error: " + e.localizedMessage)
-                }
+        scope.launch {
+            if(request.length==3)
+                throw Exception("low symbols")
+            val lat1 = target.latitude - 0.2
+            val lat2 = target.latitude + 0.2
+            val lng1 = target.longitude - 0.2
+            val lng2 = target.longitude + 0.2
+            val list = geocoder.getFromLocationName(request, 10, lat1, lng1, lat2, lng2)
+            view.post {
+                parseSearchResult(list)
             }
-        }.start()
+        }
     }
 
     private fun parseSearchResult(list: List<Address>) {
