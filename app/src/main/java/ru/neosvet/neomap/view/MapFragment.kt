@@ -112,9 +112,7 @@ class MapFragment : Fragment(), MapView, BackEvent {
                     true
                 }
                 fabDelete.visibility == View.VISIBLE -> {
-                    clearDistance()
-                    fabDelete.visibility = View.GONE
-                    fabMarker.visibility = View.VISIBLE
+                    clearSelect()
                     true
                 }
                 presenter.containsResult -> {
@@ -159,16 +157,8 @@ class MapFragment : Fragment(), MapView, BackEvent {
         map.uiSettings.isZoomControlsEnabled = true
         map.uiSettings.isRotateGesturesEnabled = false
         map.setOnMapClickListener {
-            if (selectedMaker != null) {
-                clearDistance()
-                selectedMaker = null
-            }
-            binding?.run {
-                if (fabDelete.visibility == View.VISIBLE) {
-                    fabDelete.visibility = View.GONE
-                    fabMarker.visibility = View.VISIBLE
-                }
-            }
+            if (selectedMaker != null)
+                clearSelect()
         }
         map.setOnPolylineClickListener { polyline ->
             distance -= SphericalUtil.computeDistanceBetween(polyline.points[0], polyline.points[1])
@@ -186,6 +176,16 @@ class MapFragment : Fragment(), MapView, BackEvent {
             false
         }
         presenter.loadMarkers()
+    }
+
+    private fun clearSelect() {
+        clearDistance()
+        selectedMaker?.hideInfoWindow()
+        selectedMaker = null
+        binding?.run {
+            fabDelete.visibility = View.GONE
+            fabMarker.visibility = View.VISIBLE
+        }
     }
 
     private fun clickOnMarker(marker: Marker) = binding?.run {
@@ -234,17 +234,14 @@ class MapFragment : Fragment(), MapView, BackEvent {
             pasteMarker()
         }
         fabDelete.setOnClickListener {
-            clearDistance()
             selectedMaker?.let {
+                clearSelect()
                 presenter.deleteMarker(it)
                 it.remove()
             }
-            fabDelete.visibility = View.GONE
-            fabMarker.visibility = View.VISIBLE
         }
         fabSearch.setOnClickListener {
-            selectedMaker = null
-            clearDistance()
+            clearSelect()
             searchPlaces()
         }
     }
