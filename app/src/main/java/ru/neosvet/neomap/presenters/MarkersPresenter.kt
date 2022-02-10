@@ -31,7 +31,7 @@ class MarkersPresenter(
     private fun handleError(error: Throwable) {
         error.printStackTrace()
         view.post {
-            view.showMessage(R.string.error)
+            view.showMessage(R.string.error_storage)
         }
     }
 

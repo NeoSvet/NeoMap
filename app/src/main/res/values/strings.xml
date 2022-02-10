@@ -16,7 +16,7 @@
     <string name="s_import">Импорт</string>
     <string name="export_done">Записан neo_markers.txt в Downloads</string>
     <string name="ready">Готово</string>
-    <string name="error">Произошла ошибка</string>
+    <string name="error_storage">Ошибка: нет доступа к хранилищу?</string>
     <string name="storage_denied">Функции экспорта и импорта будут недоступны</string>
     <string name="no_results">Результатов нет</string>
     <string name="format_distance">%.1f м</string>
