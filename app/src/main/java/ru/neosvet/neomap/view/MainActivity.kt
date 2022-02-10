@@ -14,13 +14,13 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val MAIN_STACK = "main"
         const val TAG_MAP = "map"
-        private const val MY_PERMISSIONS_REQUEST_LOCATION = 99
+        private const val MY_PERMISSIONS_REQUEST = 99
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        checkLocationPermission()
+        checkPermission()
         openMap()
     }
 
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                 return
         }
         super.onBackPressed()
-        if (supportFragmentManager.findFragmentByTag(TAG_MAP) == null)
+        if (supportFragmentManager.fragments.isEmpty())
             exitProcess(0)
     }
 
@@ -47,12 +47,8 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            MY_PERMISSIONS_REQUEST_LOCATION -> {
+            MY_PERMISSIONS_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    if (ContextCompat.checkSelfPermission(this,
-//                                    Manifest.permission.ACCESS_FINE_LOCATION)
-//                            == PackageManager.PERMISSION_GRANTED
-//                    ) {
                     //permission accessed
                 } else {
                     //permission denied
@@ -61,40 +57,46 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkLocationPermission() {
+    private fun checkPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
+            &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
         ) return
 
-        // Should we show an explanation?
         if (ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
+            ) || ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
         ) {
-            // Show an explanation to the user *asynchronously* -- don't block
-            // this thread waiting for the user's response! After the user
-            // sees the explanation, try again to request the permission.
-            AlertDialog.Builder(this)
-                .setTitle("Location Permission Needed")
-                .setMessage("This app needs the Location permission, please accept to use location functionality")
-                .setPositiveButton(
-                    "OK"
-                ) { _, _ ->
-                    //Prompt the user once explanation has been shown
-                    requestLocationPermission()
-                }
-                .create()
-                .show()
+            showAboutPermission()
         } else {
-            // No explanation needed, we can request the permission.
-            requestLocationPermission()
+            requestPermission()
         }
     }
 
-    private fun requestLocationPermission() {
+    private fun showAboutPermission() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.about_permission_title)
+            .setMessage(R.string.about_permission_description)
+            .setPositiveButton(
+                android.R.string.ok
+            ) { _, _ ->
+                requestPermission()
+            }
+            .create()
+            .show()
+    }
+
+    private fun requestPermission() {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(
@@ -102,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ),
-            MY_PERMISSIONS_REQUEST_LOCATION
+            MY_PERMISSIONS_REQUEST
         )
     }
 }
