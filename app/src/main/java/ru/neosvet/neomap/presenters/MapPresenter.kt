@@ -36,7 +36,9 @@ class MapPresenter(
 
     private fun handleError(error: Throwable) {
         error.printStackTrace()
-        view.showStatus(error.localizedMessage ?: "Error")
+        view.post {
+            view.showStatus(error.localizedMessage ?: "Error")
+        }
     }
 
     fun clearResult() {
@@ -157,7 +159,7 @@ class MapPresenter(
         //TODO fix search: why always only one result?
         val target = map.cameraPosition.target
         scope.launch {
-            if(request.length==3)
+            if (request.length == 3)
                 throw Exception("low symbols")
             val lat1 = target.latitude - 0.2
             val lat2 = target.latitude + 0.2

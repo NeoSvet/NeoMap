@@ -2,6 +2,7 @@ package ru.neosvet.neomap.view
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -60,6 +61,11 @@ class MapFragment : Fragment(), MapView, BackEvent {
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().setTitle(R.string.app_name)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -214,7 +220,10 @@ class MapFragment : Fragment(), MapView, BackEvent {
             ivPointer.visibility = View.VISIBLE
         }
         fabMarker.setOnLongClickListener {
-            //TODO open markers list
+            showStatus("")
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.container, MarkersFragment())
+                .addToBackStack(MainActivity.MAIN_STACK).commit()
             false
         }
         fabOk.setOnClickListener {
