@@ -18,6 +18,7 @@ class MapPresenter(
     companion object {
         private const val ZOOM_LARGE = 14f
         private const val ZOOM_FINELY = 9f
+        private const val MIN_REQUEST_LEN = 4
     }
 
     var containsResult = false
@@ -156,11 +157,13 @@ class MapPresenter(
     }
 
     fun search(request: String, geocoder: Geocoder) {
+        if (request.length < MIN_REQUEST_LEN) {
+            view.showMessage(R.string.error_short_request)
+            return
+        }
         //TODO fix search: why always only one result?
         val target = map.cameraPosition.target
         scope.launch {
-            if (request.length == 3)
-                throw Exception("low symbols")
             val lat1 = target.latitude - 0.2
             val lat2 = target.latitude + 0.2
             val lng1 = target.longitude - 0.2

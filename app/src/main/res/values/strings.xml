@@ -17,6 +17,7 @@
     <string name="export_done">Записан neo_markers.txt в Downloads</string>
     <string name="ready">Готово</string>
     <string name="error_storage">Ошибка: нет доступа к хранилищу?</string>
+    <string name="error_short_request">Слишком короткий запрос</string>
     <string name="storage_denied">Функции экспорта и импорта будут недоступны</string>
     <string name="no_results">Результатов нет</string>
     <string name="format_distance">%.1f м</string>

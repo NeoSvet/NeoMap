@@ -322,6 +322,7 @@ class MapFragment : Fragment(), MapView, BackEvent {
     override fun post(function: () -> Unit) = view?.post(function)
 
     override fun showMessage(resource: Int) {
+        showStatus("")
         Toast.makeText(
             requireContext(),
             getString(resource),
