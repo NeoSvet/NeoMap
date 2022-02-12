@@ -2,7 +2,6 @@ package ru.neosvet.neomap.view
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -25,8 +24,8 @@ import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.SphericalUtil
 import ru.neosvet.neomap.BackEvent
-import ru.neosvet.neomap.data.DataBase
 import ru.neosvet.neomap.R
+import ru.neosvet.neomap.data.DataBase
 import ru.neosvet.neomap.data.DataBaseRepository
 import ru.neosvet.neomap.databinding.FragmentMapBinding
 import ru.neosvet.neomap.presenters.MapPresenter
@@ -295,16 +294,14 @@ class MapFragment : Fragment(), MapView, BackEvent {
 
     @SuppressLint("MissingPermission")
     override fun getMyLocation(): LatLng? = locManager?.let {
-        if (permissionAccessed()) {
-            var loc = it.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            if (loc == null) {
-                loc = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                if (loc == null)
-                    loc = it.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
-            }
-            if (loc != null)
-                return LatLng(loc.latitude, loc.longitude)
+        var loc = it.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        if (loc == null) {
+            loc = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            if (loc == null)
+                loc = it.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
         }
+        if (loc != null)
+            return LatLng(loc.latitude, loc.longitude)
         return null
     }
 
