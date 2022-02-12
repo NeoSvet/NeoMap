@@ -59,6 +59,7 @@ class MapFragment : Fragment(), MapView, BackEvent {
     }.root
 
     override fun onDestroyView() {
+        presenter.onDestroy()
         binding = null
         super.onDestroyView()
     }
@@ -147,7 +148,6 @@ class MapFragment : Fragment(), MapView, BackEvent {
     }
 
     private fun initMap(map: GoogleMap) {
-        presenter.map = map
         map.uiSettings.isMyLocationButtonEnabled = false
         map.uiSettings.isZoomControlsEnabled = true
         map.uiSettings.isRotateGesturesEnabled = false
@@ -170,6 +170,7 @@ class MapFragment : Fragment(), MapView, BackEvent {
                 clickOnMarker(marker)
             false
         }
+        presenter.init(map)
         presenter.loadMarkers()
     }
 

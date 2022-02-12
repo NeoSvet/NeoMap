@@ -2,6 +2,8 @@ package ru.neosvet.neomap.presenters
 
 import android.location.Address
 import android.location.Geocoder
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
@@ -19,13 +21,19 @@ class MapPresenter(
         private const val ZOOM_LARGE = 14f
         private const val ZOOM_FINELY = 9f
         private const val MIN_REQUEST_LEN = 4
+        private val streamMarkers: MutableLiveData<NeoMarker> = MutableLiveData()
+
+        fun showMarker(marker: NeoMarker) {
+            streamMarkers.value = marker
+        }
     }
 
     var containsResult = false
         private set
     var countMarkers: Int = 0
         private set
-    lateinit var map: GoogleMap
+    private lateinit var map: GoogleMap
+    private var showMarker = false
 
     private val scope = CoroutineScope(
         Dispatchers.IO
@@ -41,6 +49,22 @@ class MapPresenter(
         }
     }
 
+    fun init(map: GoogleMap) {
+        this.map = map
+        streamMarkers.observeForever(markersObserver)
+    }
+
+    fun onDestroy() {
+        streamMarkers.removeObserver(markersObserver)
+        scope.cancel()
+    }
+
+    private val markersObserver = Observer<NeoMarker> {
+        showMarker = true
+        val loc = LatLng(it.lat, it.lng)
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, ZOOM_LARGE))
+    }
+
     fun clearResult() {
         containsResult = false
         map.clear()
@@ -48,6 +72,10 @@ class MapPresenter(
     }
 
     fun showMyLocation(): Boolean {
+        if (showMarker) {
+            showMarker = false
+            return true
+        }
         view.getMyLocation()?.let {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(it, ZOOM_LARGE))
             return true
@@ -111,6 +139,10 @@ class MapPresenter(
     }
 
     fun showPlace(place: String, geocoder: Geocoder) {
+        if(showMarker) {
+            showMarker = false
+            return
+        }
         scope.launch {
             val addresses = geocoder.getFromLocationName(place, 1)
             if (addresses.size == 0)

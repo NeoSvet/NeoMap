@@ -3,7 +3,6 @@ package ru.neosvet.neomap.view
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import ru.neosvet.neomap.R
@@ -13,6 +12,7 @@ import ru.neosvet.neomap.data.NeoMarker
 import ru.neosvet.neomap.databinding.FragmentMarkersBinding
 import ru.neosvet.neomap.list.MarkersAdapter
 import ru.neosvet.neomap.list.MarkersListEvents
+import ru.neosvet.neomap.presenters.MapPresenter
 import ru.neosvet.neomap.presenters.MarkersPresenter
 import ru.neosvet.neomap.presenters.MarkersView
 
@@ -53,11 +53,12 @@ class MarkersFragment : Fragment(), MarkersView {
 
     private fun initList() = binding?.run {
         adMarkers = MarkersAdapter(
-           events = object : MarkersListEvents {
-               override fun onClick(marker: NeoMarker) {
-                   //TODO click on marker
-               }
-           }
+            events = object : MarkersListEvents {
+                override fun onClick(marker: NeoMarker) {
+                    requireActivity().onBackPressed()
+                    MapPresenter.showMarker(marker)
+                }
+            }
         )
         rvMarkers.adapter = adMarkers
     }
