@@ -1,9 +1,12 @@
 package ru.neosvet.neomap.view
 
-import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.*
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ru.neosvet.neomap.R
 import ru.neosvet.neomap.data.DataBase
@@ -12,6 +15,7 @@ import ru.neosvet.neomap.data.NeoMarker
 import ru.neosvet.neomap.databinding.FragmentMarkersBinding
 import ru.neosvet.neomap.list.MarkersAdapter
 import ru.neosvet.neomap.list.MarkersListEvents
+import ru.neosvet.neomap.list.SwipeHelper
 import ru.neosvet.neomap.presenters.MapPresenter
 import ru.neosvet.neomap.presenters.MarkersPresenter
 import ru.neosvet.neomap.presenters.MarkersView
@@ -57,6 +61,57 @@ class MarkersFragment : Fragment(), MarkersView {
             }
         )
         rvMarkers.adapter = adMarkers
+
+        val radius = resources.getDimension(R.dimen.default_radius)
+        val colorDelete = requireActivity().getColor(R.color.colorAccent)
+        val colorEdit = requireActivity().getColor(R.color.colorPrimary)
+        val imgDelete = BitmapFactory.decodeResource(resources, R.mipmap.delete)
+        val imgEdit = BitmapFactory.decodeResource(resources, R.mipmap.edit)
+        val swipeHelper: SwipeHelper = object : SwipeHelper(requireContext()) {
+            override fun instantiateUnderlayButton(
+                viewHolder: RecyclerView.ViewHolder?,
+                underlayButtons: MutableList<UnderlayButton?>
+            ) {
+                underlayButtons.add(
+                    UnderlayButton(
+                        imgDelete, colorDelete, radius, this@MarkersFragment::deleteMarker
+                    )
+                )
+                underlayButtons.add(
+                    UnderlayButton(
+                        imgEdit, colorEdit, radius, this@MarkersFragment::editMarker
+                    )
+                )
+            }
+        }
+        swipeHelper.attachToRecyclerView(rvMarkers)
+    }
+
+    private fun deleteMarker(index: Int) {
+        adMarkers.delete(index)
+        presenter.deleteMarker(adMarkers.get(index))
+    }
+
+    private fun editMarker(index: Int) {
+        val marker = adMarkers.get(index)
+        val oldName = marker.name
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+        alertDialog.setMessage(getString(R.string.marker_name))
+        val input = EditText(requireContext())
+        input.setBackgroundResource(R.drawable.border)
+        input.setText(oldName)
+        alertDialog.setView(input)
+        alertDialog.setPositiveButton(android.R.string.ok) { _, _ ->
+            val newName = input.text.toString()
+            if (newName.isEmpty() || newName == oldName)
+                return@setPositiveButton
+            val newMarker = NeoMarker(newName, marker.lat, marker.lng)
+            presenter.editMarker(oldName, newMarker)
+            adMarkers.update(index, newMarker)
+        }
+        alertDialog.setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
+        alertDialog.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -87,7 +142,7 @@ class MarkersFragment : Fragment(), MarkersView {
     override fun showMessage(resource: Int) {
         binding?.run {
             Snackbar.make(
-                fabEdit, getString(resource),
+                root, getString(resource),
                 Snackbar.LENGTH_LONG
             ).show()
         }

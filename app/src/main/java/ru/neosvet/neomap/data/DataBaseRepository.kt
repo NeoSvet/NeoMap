@@ -12,7 +12,17 @@ class DataBaseRepository(
         cv.put(DataBase.NAME, marker.name)
         cv.put(DataBase.LAT, marker.lat)
         cv.put(DataBase.LNG, marker.lng)
-        val r = sq.update(DataBase.TABLE, cv, DataBase.NAME + " = ?", arrayOf(marker.name))
+        sq.insert(DataBase.TABLE, null, cv)
+        sq.close()
+    }
+
+    override fun updateMarker(oldName: String, marker: NeoMarker) {
+        val sq = db.writableDatabase
+        val cv = ContentValues()
+        cv.put(DataBase.NAME, marker.name)
+        cv.put(DataBase.LAT, marker.lat)
+        cv.put(DataBase.LNG, marker.lng)
+        val r = sq.update(DataBase.TABLE, cv, DataBase.NAME + " = ?", arrayOf(oldName))
         if (r == 0) // no update
             sq.insert(DataBase.TABLE, null, cv)
         sq.close()

@@ -28,6 +28,7 @@ class MarkersPresenter(
     private fun handleError(error: Throwable) {
         error.printStackTrace()
         view.post {
+            //TODO support error 'no found file'
             view.showMessage(R.string.error_storage)
         }
     }
@@ -72,6 +73,18 @@ class MarkersPresenter(
                 view.updateList(list)
                 view.showMessage(R.string.ready)
             }
+        }
+    }
+
+    fun deleteMarker(marker: NeoMarker) {
+        scope.launch {
+            repository.deleteMarker(marker.name)
+        }
+    }
+
+    fun editMarker(oldName: String, marker: NeoMarker) {
+        scope.launch {
+            repository.updateMarker(oldName, marker)
         }
     }
 

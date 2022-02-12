@@ -16,6 +16,20 @@ class MarkersAdapter(
         notifyItemInserted(list.size - 1)
     }
 
+    fun get(index: Int) = list[index]
+
+    fun delete(index: Int) {
+        list.removeAt(index)
+        notifyItemRemoved(index)
+    }
+
+    fun update(index: Int, marker: NeoMarker) {
+//        list.removeAt(index)
+//        list.add(index, marker)
+        list[index] = marker
+        notifyItemChanged(index)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MarkerHolder(
             ItemMarkerBinding.inflate(
