@@ -1,4 +1,4 @@
-package ru.neosvet.neomap;
+package ru.neosvet.neomap.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

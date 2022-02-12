@@ -6,8 +6,10 @@ import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import ru.neosvet.neomap.DataBase
 import ru.neosvet.neomap.R
+import ru.neosvet.neomap.data.DataBase
+import ru.neosvet.neomap.data.DataBaseRepository
+import ru.neosvet.neomap.data.NeoMarker
 import ru.neosvet.neomap.databinding.FragmentMarkersBinding
 import ru.neosvet.neomap.presenters.MarkersPresenter
 import ru.neosvet.neomap.presenters.MarkersView
@@ -17,7 +19,7 @@ class MarkersFragment : Fragment(), MarkersView {
     private val presenter: MarkersPresenter by lazy {
         MarkersPresenter(
             view = this,
-            db = DataBase(requireContext()),
+            repository = DataBaseRepository(DataBase(requireContext())),
         )
     }
     private lateinit var adMarkers: ArrayAdapter<String>
@@ -75,9 +77,10 @@ class MarkersFragment : Fragment(), MarkersView {
 
     override fun post(function: () -> Unit) = view?.post(function)
 
-    override fun updateList(list: ArrayList<String>) {
-        adMarkers.clear()
-        adMarkers.addAll(list)
+    override fun updateList(list: List<NeoMarker>) {
+        for (marker in list) {
+            adMarkers.add(marker.name)
+        }
         adMarkers.notifyDataSetChanged()
     }
 

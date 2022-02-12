@@ -1,18 +1,18 @@
 package ru.neosvet.neomap.presenters
 
-import android.content.ContentValues
 import android.location.Address
 import android.location.Geocoder
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.*
-import ru.neosvet.neomap.DataBase
 import ru.neosvet.neomap.R
+import ru.neosvet.neomap.data.MarkersRepository
+import ru.neosvet.neomap.data.NeoMarker
 
 class MapPresenter(
     private val view: MapView,
-    private val db: DataBase,
+    private val repository: MarkersRepository,
     private val formatLocation: String
 ) {
     companion object {
@@ -23,9 +23,8 @@ class MapPresenter(
 
     var containsResult = false
         private set
-    val countMarkers: Int
-        get() = markers.size
-    private val markers = HashMap<String, LatLng>()
+    var countMarkers: Int = 0
+        private set
     lateinit var map: GoogleMap
 
     private val scope = CoroutineScope(
@@ -45,11 +44,7 @@ class MapPresenter(
     fun clearResult() {
         containsResult = false
         map.clear()
-        for (marker in markers) {
-            val loc = LatLng(marker.value.latitude, marker.value.longitude)
-            markers[marker.key] = loc
-            addMarker(loc, marker.key, false)
-        }
+        loadMarkers()
     }
 
     fun showMyLocation(): Boolean {
@@ -77,20 +72,12 @@ class MapPresenter(
     }
 
     fun loadMarkers() {
-        val sq = db.readableDatabase
-        val cursor = sq.query(DataBase.TABLE, null, null, null, null, null, null)
-        if (cursor.moveToFirst()) {
-            val iName: Int = cursor.getColumnIndex(DataBase.NAME)
-            val iLat: Int = cursor.getColumnIndex(DataBase.LAT)
-            val iLng: Int = cursor.getColumnIndex(DataBase.LNG)
-            do {
-                val loc = LatLng(cursor.getDouble(iLat), cursor.getDouble(iLng))
-                markers[cursor.getString(iName)] = loc
-                addMarker(loc, cursor.getString(iName), false)
-            } while (cursor.moveToNext())
+        countMarkers = 0
+        for (marker in repository.getListMarkers()) {
+            val loc = LatLng(marker.lat, marker.lng)
+            addMarker(loc, marker.name, false)
+            countMarkers++
         }
-        cursor.close()
-        sq.close()
     }
 
     private fun addMarker(loc: LatLng, name: String, isSearch: Boolean) {
@@ -108,11 +95,17 @@ class MapPresenter(
         String.format(formatLocation, loc.latitude, loc.longitude)
 
     fun createMarker(name: String) {
-        if (markers.containsKey(name)) {
+        if (repository.containsMarker(name)) {
             view.showMessage(R.string.name_exist)
         } else {
             val loc: LatLng = map.cameraPosition.target
-            markers[name] = loc
+            repository.addMarker(
+                NeoMarker(
+                    name = name,
+                    lat = loc.latitude,
+                    lng = loc.longitude
+                )
+            )
             addMarker(loc, name, false)
         }
     }
@@ -135,25 +128,10 @@ class MapPresenter(
         }
     }
 
-    fun save() {
-        val sq = db.writableDatabase
-        for (marker in markers) {
-            val cv = ContentValues()
-            cv.put(DataBase.NAME, marker.key)
-            cv.put(DataBase.LAT, marker.value.latitude)
-            cv.put(DataBase.LNG, marker.value.longitude)
-            val r = sq.update(DataBase.TABLE, cv, DataBase.NAME + " = ?", arrayOf(marker.key))
-            if (r == 0) // no update
-                sq.insert(DataBase.TABLE, null, cv)
-        }
-        sq.close()
-    }
-
     fun deleteMarker(marker: Marker) {
-        val sq = db.writableDatabase
-        sq.delete(DataBase.TABLE, DataBase.NAME + " = ?", arrayOf(marker.title))
-        sq.close()
-        markers.remove(marker.title)
+        marker.title?.let {
+            repository.deleteMarker(it)
+        }
     }
 
     fun search(request: String, geocoder: Geocoder) {

@@ -25,19 +25,19 @@ import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.SphericalUtil
 import ru.neosvet.neomap.BackEvent
-import ru.neosvet.neomap.DataBase
+import ru.neosvet.neomap.data.DataBase
 import ru.neosvet.neomap.R
+import ru.neosvet.neomap.data.DataBaseRepository
 import ru.neosvet.neomap.databinding.FragmentMapBinding
 import ru.neosvet.neomap.presenters.MapPresenter
 import ru.neosvet.neomap.presenters.MapView
-
 
 class MapFragment : Fragment(), MapView, BackEvent {
     private var binding: FragmentMapBinding? = null
     private val presenter: MapPresenter by lazy {
         MapPresenter(
             view = this,
-            db = DataBase(requireContext()),
+            repository = DataBaseRepository(DataBase(requireContext())),
             formatLocation = getString(R.string.format_location)
         )
     }
@@ -95,11 +95,6 @@ class MapFragment : Fragment(), MapView, BackEvent {
             requireContext(),
             Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter.save()
     }
 
     override fun onBack(): Boolean {
