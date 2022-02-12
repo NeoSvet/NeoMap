@@ -18,6 +18,7 @@ class MapPresenter(
     private val formatLocation: String
 ) {
     companion object {
+        private const val TAG_SEARCH = "search"
         private const val ZOOM_LARGE = 14f
         private const val ZOOM_FINELY = 9f
         private const val MIN_REQUEST_LEN = 4
@@ -34,6 +35,7 @@ class MapPresenter(
         private set
     private lateinit var map: GoogleMap
     private var showMarker = false
+    private val markers = arrayListOf<Marker>()
 
     private val scope = CoroutineScope(
         Dispatchers.IO
@@ -66,9 +68,16 @@ class MapPresenter(
     }
 
     fun clearResult() {
+        if (containsResult.not())
+            return
         containsResult = false
-        map.clear()
-        loadMarkers()
+        var i = 0
+        while (i < markers.size) {
+            if (markers[i].tag == TAG_SEARCH) {
+                markers[i].remove()
+                markers.removeAt(i)
+            } else i++
+        }
     }
 
     fun showMyLocation(): Boolean {
@@ -113,10 +122,16 @@ class MapPresenter(
         m.position(loc)
         m.title(name)
         m.snippet(locToString(loc))
+        val marker: Marker?
         if (isSearch) {
             m.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-            map.addMarker(m)?.tag = "s" //tag for search marker
-        } else map.addMarker(m)
+            marker = map.addMarker(m)
+            marker?.tag = TAG_SEARCH
+        } else
+            marker = map.addMarker(m)
+        marker?.let {
+            markers.add(it)
+        }
     }
 
     private fun locToString(loc: LatLng) =
@@ -139,7 +154,7 @@ class MapPresenter(
     }
 
     fun showPlace(place: String, geocoder: Geocoder) {
-        if(showMarker) {
+        if (showMarker) {
             showMarker = false
             return
         }
@@ -188,7 +203,6 @@ class MapPresenter(
     private fun parseSearchResult(list: List<Address>) {
         view.showStatus("")
         if (list.isEmpty()) {
-            containsResult = false
             view.showMessage(R.string.no_results)
             return
         }
