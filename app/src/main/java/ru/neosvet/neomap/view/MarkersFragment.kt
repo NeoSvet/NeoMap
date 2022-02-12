@@ -40,13 +40,9 @@ class MarkersFragment : Fragment(), MarkersView {
         super.onDestroyView()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireActivity().setTitle(R.string.markers_on_maps)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().setTitle(R.string.markers_on_maps)
         initList()
         presenter.loadList()
     }

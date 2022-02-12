@@ -64,13 +64,9 @@ class MapFragment : Fragment(), MapView, BackEvent {
         super.onDestroyView()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireActivity().setTitle(R.string.app_name)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().setTitle(R.string.app_name)
         lastSearch = getString(R.string.default_search)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(onMapReady)
