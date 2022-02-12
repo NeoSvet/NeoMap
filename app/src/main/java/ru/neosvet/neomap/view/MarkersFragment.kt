@@ -11,6 +11,8 @@ import ru.neosvet.neomap.data.DataBase
 import ru.neosvet.neomap.data.DataBaseRepository
 import ru.neosvet.neomap.data.NeoMarker
 import ru.neosvet.neomap.databinding.FragmentMarkersBinding
+import ru.neosvet.neomap.list.MarkersAdapter
+import ru.neosvet.neomap.list.MarkersListEvents
 import ru.neosvet.neomap.presenters.MarkersPresenter
 import ru.neosvet.neomap.presenters.MarkersView
 
@@ -22,7 +24,7 @@ class MarkersFragment : Fragment(), MarkersView {
             repository = DataBaseRepository(DataBase(requireContext())),
         )
     }
-    private lateinit var adMarkers: ArrayAdapter<String>
+    private lateinit var adMarkers: MarkersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,12 +52,14 @@ class MarkersFragment : Fragment(), MarkersView {
     }
 
     private fun initList() = binding?.run {
-        adMarkers = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            ArrayList<String>()
+        adMarkers = MarkersAdapter(
+           events = object : MarkersListEvents {
+               override fun onClick(marker: NeoMarker) {
+                   //TODO click on marker
+               }
+           }
         )
-        lvMarkers.adapter = adMarkers
+        rvMarkers.adapter = adMarkers
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -79,9 +83,8 @@ class MarkersFragment : Fragment(), MarkersView {
 
     override fun updateList(list: List<NeoMarker>) {
         for (marker in list) {
-            adMarkers.add(marker.name)
+            adMarkers.add(marker)
         }
-        adMarkers.notifyDataSetChanged()
     }
 
     override fun showMessage(resource: Int) {
