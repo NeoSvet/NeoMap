@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import ru.neosvet.neomap.App
 import ru.neosvet.neomap.R
 import ru.neosvet.neomap.data.DataBase
 import ru.neosvet.neomap.data.DataBaseRepository
@@ -25,7 +26,7 @@ class MarkersFragment : Fragment(), MarkersView {
     private val presenter: MarkersPresenter by lazy {
         MarkersPresenter(
             view = this,
-            repository = DataBaseRepository(DataBase(requireContext())),
+            repository = App.repository,
         )
     }
     private lateinit var adMarkers: MarkersAdapter

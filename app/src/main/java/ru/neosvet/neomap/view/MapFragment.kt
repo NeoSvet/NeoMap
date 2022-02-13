@@ -23,10 +23,9 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.SphericalUtil
+import ru.neosvet.neomap.App
 import ru.neosvet.neomap.BackEvent
 import ru.neosvet.neomap.R
-import ru.neosvet.neomap.data.DataBase
-import ru.neosvet.neomap.data.DataBaseRepository
 import ru.neosvet.neomap.databinding.FragmentMapBinding
 import ru.neosvet.neomap.presenters.MapPresenter
 import ru.neosvet.neomap.presenters.MapView
@@ -36,7 +35,7 @@ class MapFragment : Fragment(), MapView, BackEvent {
     private val presenter: MapPresenter by lazy {
         MapPresenter(
             view = this,
-            repository = DataBaseRepository(DataBase(requireContext())),
+            repository = App.repository,
             formatLocation = getString(R.string.format_location)
         )
     }
@@ -166,7 +165,6 @@ class MapFragment : Fragment(), MapView, BackEvent {
             false
         }
         presenter.init(map)
-        presenter.loadMarkers()
     }
 
     private fun clearSelect() {
