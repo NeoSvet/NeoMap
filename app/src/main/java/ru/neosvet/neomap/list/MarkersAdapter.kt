@@ -24,8 +24,6 @@ class MarkersAdapter(
     }
 
     fun update(index: Int, marker: NeoMarker) {
-//        list.removeAt(index)
-//        list.add(index, marker)
         list[index] = marker
         notifyItemChanged(index)
     }
