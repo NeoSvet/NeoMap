@@ -5,6 +5,12 @@ import android.content.ContentValues
 class DataBaseRepository(
     private val db: DataBase
 ) : MarkersRepository {
+    override var isChanged: Boolean = true
+       private set
+
+    override fun fixChanges() {
+        isChanged = false
+    }
 
     override fun addMarker(marker: NeoMarker) {
         val sq = db.writableDatabase
@@ -14,6 +20,7 @@ class DataBaseRepository(
         cv.put(DataBase.LNG, marker.lng)
         sq.insert(DataBase.TABLE, null, cv)
         sq.close()
+        isChanged = true
     }
 
     override fun updateMarker(oldName: String, marker: NeoMarker) {
@@ -26,6 +33,7 @@ class DataBaseRepository(
         if (r == 0) // no update
             sq.insert(DataBase.TABLE, null, cv)
         sq.close()
+        isChanged = true
     }
 
     override fun containsMarker(name: String): Boolean {
@@ -44,6 +52,7 @@ class DataBaseRepository(
         val sq = db.writableDatabase
         sq.delete(DataBase.TABLE, DataBase.NAME + " = ?", arrayOf(name))
         sq.close()
+        isChanged = true
     }
 
     override fun getListMarkers(): List<NeoMarker> {

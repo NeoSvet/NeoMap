@@ -31,10 +31,10 @@ class MapPresenter(
 
     var containsResult = false
         private set
-    var countMarkers: Int = 0
-        private set
+    val countMarkers: Int
+        get() = markers.size
     private lateinit var map: GoogleMap
-    private var showMarker = false
+    private var isShowMarker = false
     private val markers = arrayListOf<Marker>()
 
     private val scope = CoroutineScope(
@@ -53,6 +53,12 @@ class MapPresenter(
 
     fun init(map: GoogleMap) {
         this.map = map
+        if (repository.isChanged) {
+            map.clear()
+            markers.clear()
+            loadMarkers()
+            repository.fixChanges()
+        }
         streamMarkers.observeForever(markersObserver)
     }
 
@@ -62,9 +68,19 @@ class MapPresenter(
     }
 
     private val markersObserver = Observer<NeoMarker> {
-        showMarker = true
+        isShowMarker = true
         val loc = LatLng(it.lat, it.lng)
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, ZOOM_LARGE))
+        findMarker(it.name)?.showInfoWindow()
+    }
+
+    private fun findMarker(name: String): Marker? {
+        for (marker in markers) {
+            if (marker.tag != TAG_SEARCH && marker.title == name) {
+                return marker
+            }
+        }
+        return null
     }
 
     fun clearResult() {
@@ -81,8 +97,8 @@ class MapPresenter(
     }
 
     fun showMyLocation(): Boolean {
-        if (showMarker) {
-            showMarker = false
+        if (isShowMarker) {
+            isShowMarker = false
             return true
         }
         view.getMyLocation()?.let {
@@ -108,12 +124,10 @@ class MapPresenter(
         map.isTrafficEnabled = !map.isTrafficEnabled
     }
 
-    fun loadMarkers() {
-        countMarkers = 0
+    private fun loadMarkers() {
         for (marker in repository.getListMarkers()) {
             val loc = LatLng(marker.lat, marker.lng)
             addMarker(loc, marker.name, false)
-            countMarkers++
         }
     }
 
@@ -150,12 +164,13 @@ class MapPresenter(
                 )
             )
             addMarker(loc, name, false)
+            repository.fixChanges()
         }
     }
 
     fun showPlace(place: String, geocoder: Geocoder) {
-        if (showMarker) {
-            showMarker = false
+        if (isShowMarker) {
+            isShowMarker = false
             return
         }
         scope.launch {
