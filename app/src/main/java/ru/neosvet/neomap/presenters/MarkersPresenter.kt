@@ -28,7 +28,6 @@ class MarkersPresenter(
     private fun handleError(error: Throwable) {
         error.printStackTrace()
         view.post {
-            //TODO support error 'no found file'
             view.showMessage(R.string.error_storage)
         }
     }
@@ -57,7 +56,10 @@ class MarkersPresenter(
     }
 
     fun importMarkers() {
-        if (!file.exists()) return
+        if (!file.exists()) {
+            view.showMessage(R.string.no_found_file)
+            return
+        }
         scope.launch {
             val list = arrayListOf<NeoMarker>()
             val br = BufferedReader(FileReader(file))
