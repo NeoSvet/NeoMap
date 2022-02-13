@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ru.neosvet.neomap.App
 import ru.neosvet.neomap.R
-import ru.neosvet.neomap.data.DataBase
-import ru.neosvet.neomap.data.DataBaseRepository
 import ru.neosvet.neomap.data.NeoMarker
 import ru.neosvet.neomap.databinding.FragmentMarkersBinding
 import ru.neosvet.neomap.list.MarkersAdapter
@@ -30,6 +28,7 @@ class MarkersFragment : Fragment(), MarkersView {
         )
     }
     private lateinit var adMarkers: MarkersAdapter
+    private var updateIndex = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,8 +88,8 @@ class MarkersFragment : Fragment(), MarkersView {
     }
 
     private fun deleteMarker(index: Int) {
-        adMarkers.delete(index)
         presenter.deleteMarker(adMarkers.get(index))
+        adMarkers.delete(index)
     }
 
     private fun editMarker(index: Int) {
@@ -105,13 +104,17 @@ class MarkersFragment : Fragment(), MarkersView {
         alertDialog.setView(input)
         alertDialog.setPositiveButton(android.R.string.ok) { _, _ ->
             val newName = input.text.toString()
-            if (newName.isEmpty() || newName == oldName)
+            if (newName.isEmpty() || newName == oldName) {
+                adMarkers.notifyItemChanged(index)
                 return@setPositiveButton
+            }
             val newMarker = NeoMarker(newName, marker.lat, marker.lng)
             presenter.editMarker(oldName, newMarker)
-            adMarkers.update(index, newMarker)
+            updateIndex = index
         }
-        alertDialog.setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
+        alertDialog.setNegativeButton(android.R.string.cancel) { dialog, _ ->
+            adMarkers.notifyItemChanged(index)
+        }
         alertDialog.show()
     }
 
@@ -138,6 +141,10 @@ class MarkersFragment : Fragment(), MarkersView {
         for (marker in list) {
             adMarkers.add(marker)
         }
+    }
+
+    override fun updateMarker(marker: NeoMarker) {
+        adMarkers.update(updateIndex, marker)
     }
 
     override fun showMessage(resource: Int) {

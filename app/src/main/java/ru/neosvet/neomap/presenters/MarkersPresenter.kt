@@ -84,7 +84,16 @@ class MarkersPresenter(
 
     fun editMarker(oldName: String, marker: NeoMarker) {
         scope.launch {
+            if (repository.containsMarker(marker.name)) {
+                view.post {
+                    view.showMessage(R.string.name_exist)
+                }
+                return@launch
+            }
             repository.updateMarker(oldName, marker)
+            view.post {
+                view.updateMarker(marker)
+            }
         }
     }
 
