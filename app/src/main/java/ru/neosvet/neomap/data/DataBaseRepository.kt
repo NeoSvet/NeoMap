@@ -16,6 +16,7 @@ class DataBaseRepository(
         val sq = db.writableDatabase
         val cv = ContentValues()
         cv.put(DataBase.NAME, marker.name)
+        cv.put(DataBase.DESCRIPTION, marker.description)
         cv.put(DataBase.LAT, marker.lat)
         cv.put(DataBase.LNG, marker.lng)
         sq.insert(DataBase.TABLE, null, cv)
@@ -27,6 +28,7 @@ class DataBaseRepository(
         val sq = db.writableDatabase
         val cv = ContentValues()
         cv.put(DataBase.NAME, marker.name)
+        cv.put(DataBase.DESCRIPTION, marker.description)
         cv.put(DataBase.LAT, marker.lat)
         cv.put(DataBase.LNG, marker.lng)
         val r = sq.update(DataBase.TABLE, cv, DataBase.NAME + " = ?", arrayOf(oldName))
@@ -61,11 +63,13 @@ class DataBaseRepository(
         val cursor = sq.query(DataBase.TABLE, null, null, null, null, null, null)
         if (cursor.moveToFirst()) {
             val iName: Int = cursor.getColumnIndex(DataBase.NAME)
+            val iDes: Int = cursor.getColumnIndex(DataBase.DESCRIPTION)
             val iLat: Int = cursor.getColumnIndex(DataBase.LAT)
             val iLng: Int = cursor.getColumnIndex(DataBase.LNG)
             do {
                 val marker = NeoMarker(
                     name = cursor.getString(iName),
+                    description = cursor.getString(iDes),
                     lat = cursor.getDouble(iLat),
                     lng = cursor.getDouble(iLng)
                 )
@@ -75,5 +79,16 @@ class DataBaseRepository(
         cursor.close()
         sq.close()
         return list
+    }
+
+    override fun getCountMarkers(): Int {
+        val sq = db.readableDatabase
+        val cursor = sq.query(DataBase.TABLE, null, null, null, null, null, null)
+        val result = if (cursor.moveToFirst())
+            cursor.count
+        else 0
+        cursor.close()
+        sq.close()
+        return result
     }
 }

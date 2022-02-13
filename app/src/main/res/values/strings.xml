@@ -3,6 +3,7 @@
     <string name="about_permission_title">Для чего нужны разрешения?</string>
     <string name="about_permission_description">Геолокация - чтобы показать территорию, на которой находитесь.\nХранилище - чтобы пользоваться импортом/экспортом маркеров.</string>
     <string name="marker_name">Название маркера</string>
+    <string name="marker_description">Описание маркера</string>
     <string name="search_places">Найти места</string>
     <string name="name_exist">Это название уже используется!</string>
     <string name="menu_map_mode">Режим карты</string>
@@ -27,4 +28,5 @@
     <string name="search">Поиск...</string>
     <string name="default_search">кафе</string>
     <string name="default_location">Москва</string>
+    <string name="name_is_empty">Название не может быть пустым</string>
 </resources>

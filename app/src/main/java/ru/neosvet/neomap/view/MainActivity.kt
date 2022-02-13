@@ -3,9 +3,12 @@ package ru.neosvet.neomap.view
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import ru.neosvet.neomap.App
 import ru.neosvet.neomap.BackEvent
 import ru.neosvet.neomap.R
 import kotlin.system.exitProcess
@@ -20,19 +23,33 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initDialog()
         if (savedInstanceState != null)
             return
         checkPermission()
         openMap()
     }
 
+    private fun initDialog() {
+        val bottomSheet: BottomSheetBehavior<FrameLayout> =
+            BottomSheetBehavior.from(findViewById(R.id.bottom_container))
+        App.dialog = MarkerDialog(bottomSheet)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.bottom_container, App.dialog).commit()
+        bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
     override fun onBackPressed() {
+        if (App.dialog.isHide.not()) {
+            App.dialog.hide()
+            return
+        }
         supportFragmentManager.findFragmentByTag(TAG_MAP)?.let {
             if (it is BackEvent && it.onBack())
                 return
         }
         super.onBackPressed()
-        if (supportFragmentManager.fragments.isEmpty())
+        if (supportFragmentManager.fragments.size == 1) //only dialog
             exitProcess(0)
     }
 
