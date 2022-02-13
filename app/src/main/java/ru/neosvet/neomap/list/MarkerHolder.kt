@@ -14,9 +14,10 @@ class MarkerHolder(
             events.onClick(marker)
         }
         title.text = marker.name
-        description.text = String.format(
+        location.text = String.format(
             root.context.getString(R.string.format_location),
             marker.lat, marker.lng
         )
+        description.text = marker.description
     }
 }

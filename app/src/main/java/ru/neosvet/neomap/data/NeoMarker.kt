@@ -3,13 +3,16 @@ package ru.neosvet.neomap.data
 class NeoMarker() {
     var name: String = ""
         private set
+    var description: String = ""
+        private set
     var lat: Double = 0.0
         private set
     var lng: Double = 0.0
         private set
 
-    constructor(name: String, lat: Double, lng: Double) : this() {
+    constructor(name: String, description: String, lat: Double, lng: Double) : this() {
         this.name = name
+        this.description = description
         this.lat = lat
         this.lng = lng
     }
@@ -21,8 +24,10 @@ class NeoMarker() {
         lat = line.substring(i, line.indexOf(",", i)).toDouble()
         i = line.indexOf("\"") + 1
         name = line.substring(i, line.indexOf("\"", i))
+        i = line.indexOf("\"", i) + 2
+        description = line.substring(i, line.indexOf("\"", i))
     }
 
     fun toLine(): String =
-        "[$lng,$lat,\"$name\",\"\"]\n"
+        "[$lng,$lat,\"$name\",\"$description\"]\n"
 }

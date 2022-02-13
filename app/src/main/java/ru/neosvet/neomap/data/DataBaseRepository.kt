@@ -6,7 +6,7 @@ class DataBaseRepository(
     private val db: DataBase
 ) : MarkersRepository {
     override var isChanged: Boolean = true
-       private set
+        private set
 
     override fun fixChanges() {
         isChanged = false

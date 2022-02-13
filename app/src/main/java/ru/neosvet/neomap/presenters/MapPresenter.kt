@@ -15,7 +15,8 @@ import ru.neosvet.neomap.data.NeoMarker
 class MapPresenter(
     private val view: MapView,
     private val repository: MarkersRepository,
-    private val formatLocation: String
+    private val formatLocation: String,
+    private val searchTip: String
 ) {
     companion object {
         private const val TAG_SEARCH = "search"
@@ -31,8 +32,6 @@ class MapPresenter(
 
     var containsResult = false
         private set
-    val countMarkers: Int
-        get() = markers.size
     private lateinit var map: GoogleMap
     private var isShowMarker = false
     private val markers = arrayListOf<Marker>()
@@ -127,15 +126,18 @@ class MapPresenter(
     private fun loadMarkers() {
         for (marker in repository.getListMarkers()) {
             val loc = LatLng(marker.lat, marker.lng)
-            addMarker(loc, marker.name, false)
+            addMarker(loc, marker.name, marker.description, false)
         }
     }
 
-    private fun addMarker(loc: LatLng, name: String, isSearch: Boolean) {
+    private fun addMarker(loc: LatLng, name: String, description: String, isSearch: Boolean) {
         val m = MarkerOptions()
         m.position(loc)
         m.title(name)
-        m.snippet(locToString(loc))
+        if (description.isEmpty())
+            m.snippet(locToString(loc))
+        else
+            m.snippet(description)
         val marker: Marker?
         if (isSearch) {
             m.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
@@ -151,21 +153,18 @@ class MapPresenter(
     private fun locToString(loc: LatLng) =
         String.format(formatLocation, loc.latitude, loc.longitude)
 
-    fun createMarker(name: String) {
-        if (repository.containsMarker(name)) {
-            view.showMessage(R.string.name_exist)
-        } else {
-            val loc: LatLng = map.cameraPosition.target
-            repository.addMarker(
-                NeoMarker(
-                    name = name,
-                    lat = loc.latitude,
-                    lng = loc.longitude
-                )
+    fun createMarker(name: String, description: String) {
+        val loc: LatLng = map.cameraPosition.target
+        repository.addMarker(
+            NeoMarker(
+                name = name,
+                description = description,
+                lat = loc.latitude,
+                lng = loc.longitude
             )
-            addMarker(loc, name, false)
-            repository.fixChanges()
-        }
+        )
+        addMarker(loc, name, description, false)
+        repository.fixChanges()
     }
 
     fun showPlace(place: String, geocoder: Geocoder) {
@@ -223,7 +222,7 @@ class MapPresenter(
         }
         for (place in list) {
             val loc = LatLng(place.latitude, place.longitude)
-            addMarker(loc, place.featureName, true)
+            addMarker(loc, place.featureName, searchTip, true)
         }
         containsResult = true
     }

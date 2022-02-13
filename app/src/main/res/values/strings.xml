@@ -29,4 +29,5 @@
     <string name="default_search">кафе</string>
     <string name="default_location">Москва</string>
     <string name="name_is_empty">Название не может быть пустым</string>
+    <string name="search_tip">Результат поиска</string>
 </resources>

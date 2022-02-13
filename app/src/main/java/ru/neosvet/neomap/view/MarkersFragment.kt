@@ -3,8 +3,6 @@ package ru.neosvet.neomap.view
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.*
-import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -28,7 +26,6 @@ class MarkersFragment : Fragment(), MarkersView {
         )
     }
     private lateinit var adMarkers: MarkersAdapter
-    private var updateIndex = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,28 +91,12 @@ class MarkersFragment : Fragment(), MarkersView {
 
     private fun editMarker(index: Int) {
         val marker = adMarkers.get(index)
-        val oldName = marker.name
-
-        val alertDialog = AlertDialog.Builder(requireContext())
-        alertDialog.setMessage(getString(R.string.marker_name))
-        val input = EditText(requireContext())
-        input.setBackgroundResource(R.drawable.border)
-        input.setText(oldName)
-        alertDialog.setView(input)
-        alertDialog.setPositiveButton(android.R.string.ok) { _, _ ->
-            val newName = input.text.toString()
-            if (newName.isEmpty() || newName == oldName) {
-                adMarkers.notifyItemChanged(index)
-                return@setPositiveButton
-            }
-            val newMarker = NeoMarker(newName, marker.lat, marker.lng)
+        App.dialog.show(marker) { name, description ->
+            val oldName = marker.name
+            val newMarker = NeoMarker(name, description, marker.lat, marker.lng)
             presenter.editMarker(oldName, newMarker)
-            updateIndex = index
+            adMarkers.update(index, newMarker)
         }
-        alertDialog.setNegativeButton(android.R.string.cancel) { dialog, _ ->
-            adMarkers.notifyItemChanged(index)
-        }
-        alertDialog.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -141,10 +122,6 @@ class MarkersFragment : Fragment(), MarkersView {
         for (marker in list) {
             adMarkers.add(marker)
         }
-    }
-
-    override fun updateMarker(marker: NeoMarker) {
-        adMarkers.update(updateIndex, marker)
     }
 
     override fun showMessage(resource: Int) {

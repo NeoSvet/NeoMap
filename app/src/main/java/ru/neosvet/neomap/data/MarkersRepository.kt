@@ -8,4 +8,5 @@ interface MarkersRepository {
     fun containsMarker(name: String): Boolean
     fun deleteMarker(name: String)
     fun getListMarkers() : List<NeoMarker>
+    fun getCountMarkers() : Int
 }

@@ -36,7 +36,8 @@ class MapFragment : Fragment(), MapView, BackEvent {
         MapPresenter(
             view = this,
             repository = App.repository,
-            formatLocation = getString(R.string.format_location)
+            formatLocation = getString(R.string.format_location),
+            searchTip = getString(R.string.search_tip)
         )
     }
     private var locManager: LocationManager? = null
@@ -275,19 +276,7 @@ class MapFragment : Fragment(), MapView, BackEvent {
     }
 
     private fun pasteMarker() {
-        val alertDialog = AlertDialog.Builder(requireContext())
-        alertDialog.setMessage(getString(R.string.marker_name))
-        val input = EditText(requireContext())
-        input.setBackgroundResource(R.drawable.border)
-        input.setText(String.format(getString(R.string.format_marker), presenter.countMarkers + 1))
-        alertDialog.setView(input)
-        alertDialog.setPositiveButton(android.R.string.ok) { _, _ ->
-            val name = input.text.toString()
-            if (name.isNotEmpty())
-                presenter.createMarker(name)
-        }
-        alertDialog.setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
-        alertDialog.show()
+        App.dialog.show(null, presenter::createMarker)
     }
 
     @SuppressLint("MissingPermission")
