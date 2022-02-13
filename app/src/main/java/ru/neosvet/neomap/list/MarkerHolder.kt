@@ -1,5 +1,6 @@
 package ru.neosvet.neomap.list
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import ru.neosvet.neomap.R
 import ru.neosvet.neomap.data.NeoMarker
@@ -18,6 +19,11 @@ class MarkerHolder(
             root.context.getString(R.string.format_location),
             marker.lat, marker.lng
         )
-        description.text = marker.description
+        if (marker.description.isEmpty()) {
+            description.visibility = View.GONE
+        } else {
+            description.visibility = View.VISIBLE
+            description.text = marker.description
+        }
     }
 }
