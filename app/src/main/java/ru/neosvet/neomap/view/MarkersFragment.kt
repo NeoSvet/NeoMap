@@ -60,8 +60,8 @@ class MarkersFragment : Fragment(), MarkersView {
         rvMarkers.adapter = adMarkers
 
         val radius = resources.getDimension(R.dimen.default_radius)
-        val colorDelete = requireActivity().getColor(R.color.colorAccent)
-        val colorEdit = requireActivity().getColor(R.color.colorPrimary)
+        val colorDelete = requireActivity().getColor(R.color.colorPrimary)
+        val colorEdit = requireActivity().getColor(R.color.colorPrimaryDark)
         val imgDelete = BitmapFactory.decodeResource(resources, R.mipmap.delete)
         val imgEdit = BitmapFactory.decodeResource(resources, R.mipmap.edit)
         val swipeHelper: SwipeHelper = object : SwipeHelper(requireContext()) {

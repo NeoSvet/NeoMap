@@ -9,27 +9,30 @@
     app:cardElevation="4dp">
 
     <LinearLayout
-        android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorPrimaryDark"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorSurface"
             android:textSize="9sp" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorPrimaryDark"
             android:textSize="12sp" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

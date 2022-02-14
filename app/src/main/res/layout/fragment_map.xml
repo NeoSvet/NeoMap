@@ -21,7 +21,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorPrimaryDark" />
 
     <TextView
         android:id="@+id/tvInfo"
@@ -31,7 +32,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:background="@drawable/field"
         android:padding="5dp"
-        android:textColor="#ffffff"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="14sp"
         android:textStyle="bold"
         android:visibility="gone"

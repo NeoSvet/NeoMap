@@ -192,7 +192,7 @@ class MapFragment : Fragment(), MapView, BackEvent {
         if (loc != null) {
             val lineOpt = PolylineOptions()
             lineOpt.add(loc).add(marker.position)
-            lineOpt.color(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+            lineOpt.color(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
             lineOpt.clickable(true)
             line.add(presenter.addLine(lineOpt))
             distance += SphericalUtil.computeDistanceBetween(loc, marker.position)
