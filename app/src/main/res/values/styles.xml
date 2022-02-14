@@ -12,6 +12,9 @@
         <item name="actionBarStyle">@style/ActionBarStyle</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="floatingActionButtonStyle">@style/FabStyle</item>
+        <item name="actionBarPopupTheme">@style/PopupStyle</item>
+        <item name="popupMenuBackground">@color/colorPrimary</item>
+        <item name="android:dropDownListViewStyle">@style/DropListStyle</item>
     </style>
 
     <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -40,6 +43,16 @@
 
     <style name="ActionBarStyle" parent="Widget.MaterialComponents.ActionBar.Solid">
         <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="PopupStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:background">@drawable/menu_selector</item>
+    </style>
+
+    <style name="DropListStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:divider">@color/colorOnPrimary</item>
+        <item name="android:dividerHeight">1dp</item>
     </style>
 
 </resources>
