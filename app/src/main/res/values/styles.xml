@@ -1,24 +1,58 @@
-<resources>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents">
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorCard</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSurface">#5161B8</item>
+        <item name="colorOnSurface">@color/colorAccent</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="actionBarStyle">@style/ActionBarStyle</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="floatingActionButtonStyle">@style/FabStyle</item>
+        <item name="actionBarPopupTheme">@style/PopupStyle</item>
+        <item name="popupMenuBackground">@color/colorPrimary</item>
+        <item name="android:dropDownListViewStyle">@style/DropListStyle</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/outline_selector</item>
+        <item name="hintTextColor">?attr/colorPrimary</item>
+        <item name="android:textColorHint">?attr/colorPrimary</item>
+        <item name="boxStrokeWidth">2dp</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
+        <item name="android:inputType">textShortMessage</item>
+        <item name="android:imeOptions">actionDone</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
 
-    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="FabStyle" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="tint">?attr/colorAccent</item>
+    </style>
 
-    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="ActionBarStyle" parent="Widget.MaterialComponents.ActionBar.Solid">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="PopupStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:background">@drawable/menu_selector</item>
+    </style>
+
+    <style name="DropListStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:divider">@color/colorOnPrimary</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
 
 </resources>

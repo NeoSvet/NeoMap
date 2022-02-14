@@ -1,19 +1,30 @@
 <resources>
     <string name="app_name">НеоКарты</string>
-    <string name="marker_name">Название маркера</string>
+    <string name="about_permission_title">Для чего нужны разрешения?</string>
+    <string name="about_permission_description">Геолокация нужна для того, чтобы показать территорию, на которой вы находитесь.</string>
+    <string name="marker_name">Название отметки</string>
+    <string name="marker_description">Описание отметки</string>
     <string name="search_places">Найти места</string>
     <string name="name_exist">Это название уже используется!</string>
     <string name="menu_map_mode">Режим карты</string>
-    <string name="menu_map_mode_normal">Нормальный</string>
+    <string name="menu_map_mode_normal">Схема</string>
     <string name="menu_map_mode_satellite">Спутник</string>
-    <string name="menu_map_mode_terrain">Территория</string>
+    <string name="menu_map_mode_hybrid">Гибрид</string>
     <string name="menu_map_traffic">Пробки</string>
     <string name="menu_map_location">Моя позиция</string>
-    <string name="title_activity_markers">Метки на карте</string>
+    <string name="markers_on_maps">Отметки на карте</string>
     <string name="s_export">Экспорт</string>
     <string name="s_import">Импорт</string>
-    <string name="export_done">Записан neo_markers.txt в Downloads</string>
     <string name="ready">Готово</string>
+    <string name="error_short_request">Слишком короткий запрос</string>
+    <string name="no_results">Результатов нет</string>
+    <string name="format_distance">%.1f м</string>
+    <string name="format_location">Ш: %.4f | Д: %.4f</string>
+    <string name="format_marker">Отметка %d</string>
+    <string name="search">Поиск…</string>
+    <string name="default_search">кафе</string>
+    <string name="default_location">Москва</string>
+    <string name="name_is_empty">Название не может быть пустым</string>
+    <string name="search_tip">Результат поиска</string>
     <string name="error">Произошла ошибка</string>
-    <string name="storage_denied">Функции экспорта и импорта будут недоступны</string>
 </resources>
