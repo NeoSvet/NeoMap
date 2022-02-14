@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showAboutPermission() {
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
             .setTitle(R.string.about_permission_title)
             .setMessage(R.string.about_permission_description)
             .setPositiveButton(
@@ -104,7 +104,8 @@ class MainActivity : AppCompatActivity() {
                 requestPermission()
             }
             .create()
-            .show()
+        dialog.show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.colorAccent));
     }
 
     private fun requestPermission() {
