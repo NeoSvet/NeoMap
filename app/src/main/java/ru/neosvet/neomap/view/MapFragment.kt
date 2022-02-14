@@ -9,6 +9,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
@@ -291,7 +292,7 @@ class MapFragment : Fragment(), MapView, BackEvent {
 
     override fun post(function: () -> Unit) = view?.post(function)
 
-    override fun showMessage(resource: Int) {
+    override fun showMessage(@StringRes resource: Int) {
         showStatus("")
         Toast.makeText(
             requireContext(),

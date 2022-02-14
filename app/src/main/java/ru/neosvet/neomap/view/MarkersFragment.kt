@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.*
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -164,7 +165,7 @@ class MarkersFragment : Fragment(), MarkersView {
         }
     }
 
-    override fun showMessage(resource: Int) {
+    override fun showMessage(@StringRes resource: Int) {
         binding?.run {
             Snackbar.make(
                 root, getString(resource),
