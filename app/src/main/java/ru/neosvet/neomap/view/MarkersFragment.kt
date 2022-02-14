@@ -1,5 +1,6 @@
 package ru.neosvet.neomap.view
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.*
@@ -17,7 +18,14 @@ import ru.neosvet.neomap.presenters.MapPresenter
 import ru.neosvet.neomap.presenters.MarkersPresenter
 import ru.neosvet.neomap.presenters.MarkersView
 
+
 class MarkersFragment : Fragment(), MarkersView {
+    companion object {
+        private const val TEXT_TYPE = "text/plain"
+        private const val READ_FILE_REQUEST = 77
+        private const val WRITE_FILE_REQUEST = 88
+    }
+
     private var binding: FragmentMarkersBinding? = null
     private val presenter: MarkersPresenter by lazy {
         MarkersPresenter(
@@ -106,14 +114,46 @@ class MarkersFragment : Fragment(), MarkersView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_export ->
-                presenter.exportMarkers()
-            R.id.menu_import ->
-                presenter.importMarkers()
+            R.id.menu_export -> {
+                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+                intent.type = TEXT_TYPE
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+                startActivityForResult(intent, WRITE_FILE_REQUEST)
+            }
+            R.id.menu_import -> {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.type = TEXT_TYPE
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+                startActivityForResult(intent, READ_FILE_REQUEST)
+            }
             else ->
                 return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data == null)
+            return
+        when(requestCode) {
+            READ_FILE_REQUEST -> {
+                data.data?.let { uri ->
+                    requireContext().contentResolver.openInputStream(uri)?.let { stream ->
+                        presenter.importMarkers(stream)
+                    }
+                }
+            }
+            WRITE_FILE_REQUEST -> {
+                data.data?.let { uri ->
+                    requireContext().contentResolver.openOutputStream(uri)?.let { stream ->
+                        presenter.exportMarkers(stream)
+                    }
+                }
+            }
+        }
+
     }
 
     override fun post(function: () -> Unit) = view?.post(function)
@@ -131,5 +171,12 @@ class MarkersFragment : Fragment(), MarkersView {
                 Snackbar.LENGTH_LONG
             ).show()
         }
+    }
+
+    override fun sendText(text: String) {
+        val sendIntent = Intent(Intent.ACTION_SEND)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text)
+        sendIntent.type = TEXT_TYPE
+        startActivity(sendIntent)
     }
 }

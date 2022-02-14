@@ -1,23 +1,16 @@
 package ru.neosvet.neomap.presenters
 
-import android.os.Environment
 import kotlinx.coroutines.*
 import ru.neosvet.neomap.R
 import ru.neosvet.neomap.data.MarkersRepository
 import ru.neosvet.neomap.data.NeoMarker
-import java.io.*
+import java.io.InputStream
+import java.io.OutputStream
 
 class MarkersPresenter(
     private val view: MarkersView,
     private val repository: MarkersRepository
 ) {
-    private val file: File by lazy {
-        File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                .absolutePath + "/neo_markers.txt"
-        )
-    }
-
     private val scope = CoroutineScope(
         Dispatchers.IO
                 + SupervisorJob()
@@ -28,7 +21,7 @@ class MarkersPresenter(
     private fun handleError(error: Throwable) {
         error.printStackTrace()
         view.post {
-            view.showMessage(R.string.error_storage)
+            view.showMessage(R.string.error)
         }
     }
 
@@ -41,28 +34,24 @@ class MarkersPresenter(
         }
     }
 
-    fun exportMarkers() {
+    fun exportMarkers(stream: OutputStream) {
         scope.launch {
-            val bw = BufferedWriter(FileWriter(file))
+            val bw = stream.bufferedWriter()
             for (marker in repository.getListMarkers()) {
                 bw.write(marker.toLine())
                 bw.flush()
             }
             bw.close()
             view.post {
-                view.showMessage(R.string.export_done)
+                view.showMessage(R.string.ready)
             }
         }
     }
 
-    fun importMarkers() {
-        if (!file.exists()) {
-            view.showMessage(R.string.no_found_file)
-            return
-        }
+    fun importMarkers(stream: InputStream) {
         scope.launch {
             val list = arrayListOf<NeoMarker>()
-            val br = BufferedReader(FileReader(file))
+            val br = stream.bufferedReader()
             var s = br.readLine()
             while (s != null) {
                 val marker = NeoMarker(s)

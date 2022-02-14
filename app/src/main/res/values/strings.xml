@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">НеоКарты</string>
     <string name="about_permission_title">Для чего нужны разрешения?</string>
-    <string name="about_permission_description">Геолокация - чтобы показать территорию, на которой находитесь.\nХранилище - чтобы пользоваться импортом/экспортом маркеров.</string>
+    <string name="about_permission_description">Геолокация нужна для того, чтобы показать территорию, на которой вы находитесь.</string>
     <string name="marker_name">Название отметки</string>
     <string name="marker_description">Описание отметки</string>
     <string name="search_places">Найти места</string>
@@ -15,12 +15,8 @@
     <string name="markers_on_maps">Отметки на карте</string>
     <string name="s_export">Экспорт</string>
     <string name="s_import">Импорт</string>
-    <string name="export_done">Записан neo_markers.txt в Downloads</string>
     <string name="ready">Готово</string>
-    <string name="no_found_file">Не найден файл neo_markers.txt в Downloads</string>
-    <string name="error_storage">Ошибка: нет доступа к хранилищу?</string>
     <string name="error_short_request">Слишком короткий запрос</string>
-    <string name="storage_denied">Функции экспорта и импорта будут недоступны</string>
     <string name="no_results">Результатов нет</string>
     <string name="format_distance">%.1f м</string>
     <string name="format_location">Ш: %.4f | Д: %.4f</string>
@@ -30,4 +26,5 @@
     <string name="default_location">Москва</string>
     <string name="name_is_empty">Название не может быть пустым</string>
     <string name="search_tip">Результат поиска</string>
+    <string name="error">Произошла ошибка</string>
 </resources>
