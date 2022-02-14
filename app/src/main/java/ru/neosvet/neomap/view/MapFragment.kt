@@ -8,10 +8,9 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.*
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -46,6 +45,7 @@ class MapFragment : Fragment(), MapView, BackEvent {
     private var distance = 0.0
     private val line = ArrayList<Polyline>()
     private lateinit var lastSearch: String
+    private lateinit var searchView: SearchView
 
     //TODO return speedometer?
 
@@ -96,6 +96,10 @@ class MapFragment : Fragment(), MapView, BackEvent {
     override fun onBack(): Boolean {
         binding?.run {
             return when {
+                searchView.isIconified.not() -> {
+                    searchView.onActionViewCollapsed()
+                    true
+                }
                 fabOk.visibility == View.VISIBLE -> {
                     fabMarker.visibility = View.VISIBLE
                     fabOk.visibility = View.GONE
@@ -118,9 +122,30 @@ class MapFragment : Fragment(), MapView, BackEvent {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_menu, menu)
-        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         menu.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        menu.getItem(2).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        menu.getItem(2).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+
+        searchView = menu.findItem(R.id.menu_search).actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                clearSelect()
+                presenter.clearResult()
+                if (query.isEmpty())
+                    return false
+                searchView.onActionViewCollapsed()
+                lastSearch = query
+                showStatus(getString(R.string.search))
+                presenter.search(query, Geocoder(requireContext()))
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return true
+            }
+        })
+        searchView.setQuery(lastSearch, false)
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -134,8 +159,6 @@ class MapFragment : Fragment(), MapView, BackEvent {
                 presenter.setHybridMap()
             R.id.menu_map_traffic ->
                 presenter.switchTraffic()
-            R.id.menu_map_location ->
-                presenter.showMyLocation()
             else ->
                 return super.onOptionsItemSelected(item)
         }
@@ -230,35 +253,9 @@ class MapFragment : Fragment(), MapView, BackEvent {
                 it.remove()
             }
         }
-        fabSearch.setOnClickListener {
-            clearSelect()
-            searchPlaces()
+        fabPosition.setOnClickListener {
+            presenter.showMyLocation()
         }
-    }
-
-    private fun searchPlaces() {
-        presenter.clearResult()
-        val alertDialog = AlertDialog.Builder(requireContext())
-        alertDialog.setMessage(getString(R.string.search_places))
-        val input = EditText(requireContext())
-        input.setBackgroundResource(R.drawable.border)
-        input.setText(lastSearch)
-        alertDialog.setView(input)
-        alertDialog.setPositiveButton(
-            android.R.string.ok
-        ) { dialog, _ ->
-            val request = input.text.toString()
-            if (request.isEmpty())
-                return@setPositiveButton
-            lastSearch = request
-            dialog.cancel()
-            showStatus(getString(R.string.search))
-            presenter.search(request, Geocoder(requireContext()))
-        }
-        alertDialog.setNegativeButton(
-            android.R.string.cancel
-        ) { dialog, _ -> dialog.cancel() }
-        alertDialog.show()
     }
 
     private fun clearDistance() {
